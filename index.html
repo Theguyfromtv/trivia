@@ -3,13 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    
-    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Trivia Game</title>
 </head>
 <body>
     
@@ -23,13 +19,17 @@
                             <!-- question and answer div-->
                             <div id="questions">
                                 <div id="question">
-                                    <h3 class="questionText"></h3>
-                                    <ul class="questionOptions">
-                                    </ul>
+                                    <h3 id="questionText"></h3>
+                                      <ul id="answers">
+                                        <li id="option1"></li>
+                                        <li id="option2"></li>
+                                        <li id="option3"></li>
+                                        <li id="option4"></li>
+                                      </ul>
                                 </div>
                             </div>
                             <!-- start button-->
-                        <button class="btn btn-primary"> start game</button>
+                        <button id="start" class="btn btn-primary"> start game</button>
                     </div>
                 </div>
             </div>  
@@ -51,11 +51,42 @@
 
         //here's a story all about how we have to start by writing out the questions and answers, and set up the counters
 
-        var questions = [{q: "What's the meaning of life?", a: "42"}, {q: "What's up doc?", a: "Not much"}];
+        var questions = [{q: "What's the meaning of life?", a: ["42", "53", "106", "1"], r: 0}, {q: "What's up doc?", a: "Not much"}];
         var rightAnswers= 0;
         var wrongAnswers= 0;
+        var i = 0;
 
         //let's move on to the actual code I guess
+
+
+        //this is the main function, it's supposed to be triggered by the start button and then run over and over again until it's done.
+
+        newQuestion=function(){
+
+            $("#start").hide();
+            console.log(questions[i].q);
+            console.log(questions[i].a[0]);
+            console.log(questions[i].a[1]);
+            console.log(questions[i].a[2]);
+            console.log(questions[i].a[3]);
+
+            $("#questionText").html(questions[i].q);
+            $("#option1").html(questions[i].a[0]);
+            $("#option2").html(questions[i].a[1]);
+            $("#option3").html(questions[i].a[2]);
+            $("#option4").html(questions[i].a[3]);
+            i++;
+
+            }
+            
+            $(".card-body").on("click", "#start", function(){
+
+                newQuestion()
+            })
+            
+
+
+        
 
 
 
