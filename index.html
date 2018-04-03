@@ -8,7 +8,8 @@
     <title>Trivia Game</title>
 </head>
 <body>
-    
+    <img src="" alt="">
+    <img src="" alt="">
     <!-- main content div-->
     <div class="container">
         <div class="row">
@@ -19,12 +20,14 @@
                             <!-- question and answer div-->
                             <div id="questions">
                                 <div id="question">
+                                    <h2 id="time">Time remaining: <span id="timer"></span></h2>
                                     <h3 id="questionText"></h3>
-                                      <ul id="answers">
-                                        <li id="option1"></li>
-                                        <li id="option2"></li>
-                                        <li id="option3"></li>
-                                        <li id="option4"></li>
+                                    <div id="imgGoesHere"></div>
+                                      <ul class="answers">
+                                        <li class="answer btn btn-primary" id="0"></li>
+                                        <li class="answer btn btn-primary" id="1"></li>
+                                        <li class="answer btn btn-primary" id="2"></li>
+                                        <li class="answer btn btn-primary" id="3"></li>
                                       </ul>
                                 </div>
                             </div>
@@ -39,7 +42,6 @@
 
 
     <script>
-
         //upon clicking the start button, first question appears
         //there's a 50 second counter that automatically starts
         //question has four answers, they highlight when you hover
@@ -49,43 +51,127 @@
         //if the time runs out, the game ends, you get a you lose message, and you have to refresh to play again
         //once the game ends, it tells you how many question you got wrong or right
 
+        $( document ).ready(function() {
+        
         //here's a story all about how we have to start by writing out the questions and answers, and set up the counters
 
-        var questions = [{q: "What's the meaning of life?", a: ["42", "53", "106", "1"], r: 0}, {q: "What's up doc?", a: "Not much"}];
+        var questions = [{q: "What's the meaning of life?", a: ["42", "53", "106", "1"], r: "0", img:"images/jTvudfL.gif" }, {q: "At what speed will you see some serious shit?", a: ["100 mph", "88 kph", "98 mph", "88 mph"], r: "3", img: "images/Delorean.gif"}, {q: "What do you say if someone asks you if you're a god?", a:["No", "I don't know", "Yes", "There is no god"], r:"2", img: "images/Ghostbusters.gif"},{}];
         var rightAnswers= 0;
         var wrongAnswers= 0;
-        var i = 0;
+        var i = -1;
+        var number = 10;
+        var intervalId;
 
         //let's move on to the actual code I guess
 
 
+        
+        //hiding some stuff I don't want people to see before the game starts
+        $("#time").hide();
+        $(".answers").hide();
+
+
         //this is the main function, it's supposed to be triggered by the start button and then run over and over again until it's done.
+
 
         newQuestion=function(){
 
+            i++;
+            if(i===questions.length-1){
+                $("#answers").hide();
+                $("#imgGoesHere").hide();
+                $("#questionText").html("Right Answers: " + rightAnswers/2 + ", Wrong Answers: " +wrongAnswers/2);}
+                
+                else {
+
+            //show timer back up
+            $("#time").show();
+            $(".answers").show();
+            $("#imgGoesHere").hide();
+
+            //show the actual timer value
+            $("#timer").text(number);
+
+            //hide the start button and console log the questions and answers
             $("#start").hide();
             console.log(questions[i].q);
             console.log(questions[i].a[0]);
             console.log(questions[i].a[1]);
             console.log(questions[i].a[2]);
             console.log(questions[i].a[3]);
-
+            
+            //putting the questions and answers on screen
             $("#questionText").html(questions[i].q);
-            $("#option1").html(questions[i].a[0]);
-            $("#option2").html(questions[i].a[1]);
-            $("#option3").html(questions[i].a[2]);
-            $("#option4").html(questions[i].a[3]);
-            i++;
+            $("#0").html(questions[i].a[0]);
+            $("#1").html(questions[i].a[1]);
+            $("#2").html(questions[i].a[2]);
+            $("#3").html(questions[i].a[3]);
+            
+
+            function countDown() {
+            intervalId = setTimeout(decrement, 1000);
+            }
+
+            function decrement() {
+
+            number--;
+
+            $("#timer").text(number);
+
+            if (number === 0) {
+            $("#question").hide();
+            $("#questions").text("Time's up! Refresh the page to start again")    
+            }
 
             }
+
+            countDown();
             
+            $(".answers").click(".answer", function(){
+
+                var answerId = $(event.target).attr("id");
+                console.log(answerId);
+                console.log(questions[i].r);
+
+                if (answerId===questions[i].r){
+                    $("#time").hide();
+                    clearTimeout(intervalId);
+                    console.log("correct");
+                    $(".answers").hide();
+                    $("#questionText").text("That's Right!");
+                    $("#imgGoesHere").show();
+                    $("#imgGoesHere").html("<img src=" + questions[i].img + " width='400px'>");
+                    console.log(i); 
+                    rightAnswers++;
+                }
+                else if (answerId!==questions[i].r){
+                    $("#time").hide();
+                    clearTimeout(intervalId);
+                    console.log("incorrect");
+                    $(".answers").hide();
+                    $("#questionText").text("Wrong! It's actually " + questions[i].a[questions[i].r]);
+                    $("#imgGoesHere").show();
+                    $("#imgGoesHere").html("<img src=" + questions[i].img + " width='400px'>");
+                    wrongAnswers++;
+                };
+            })
+            
+            }
+
+            }
+
             $(".card-body").on("click", "#start", function(){
 
                 newQuestion()
             })
-            
 
+            $(".answers").click(".answer", function newQuestionTimer(){
+                 {setTimeout(newQuestion, 2000);}
+            });
+                
+            });
 
+          
         
 
 
